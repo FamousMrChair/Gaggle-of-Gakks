@@ -27,7 +27,7 @@ Setup guide for express + ejs so you can develop with node similarly to how you 
     const express = require('express')
     const app = express()
     const port = 3000
-    app.set('view engine', 'ejs')
+    app.set('view engine', 'ejs') //remove if you do not plan to use the ejs view engine
 
     app.get('/', (req, res) => {
         res.send('Hello World!')
@@ -44,7 +44,14 @@ Setup guide for express + ejs so you can develop with node similarly to how you 
     mkdir public  (for JS, CSS, images)
     mkdir views   (for HTML equivalents)
     ```
-2. Install the ejs view engine. It's like jinja, and .ejs files have HTML syntax, so it's easier to understand coming from Flask.
+2. Install the ejs view engine. It's like jinja, and .ejs files have HTML syntax, so it's easier to understand coming from Flask. If you don't want to use a view engine, you can instead render html with
+    ```javascript
+    app.get('/', (req, res) => {
+        res.sendFile('index.html', {root : 'views'})
+        //change the path and the root folder as necessary
+    })
+    ```
+    Below is a quick guide to ejs
     ```
     npm install ejs
     ```
@@ -133,7 +140,7 @@ Setup guide for express + ejs so you can develop with node similarly to how you 
 
 ---
 
-Accurate as of (last update): 2022-05-30
+Accurate as of (last update): 2022-06-01
 
 #### Contributors:  
 Kevin Li pd7 
