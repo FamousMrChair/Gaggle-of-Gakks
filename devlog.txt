@@ -1,1 +1,34 @@
 here shall be the log of the adventures of two week final projects yipee!
+Gaggle-of-Gakks
+Kevin Xiao
+Kevin Li
+Anjini Katari
+Gordon Mo
+
+pd7
+---------------------
+P05 -- Kahooters
+
+ ______   ______   __   __   __       ______   _______
+/_____/\ /_____/\ /_/\ /_/\ /_/\     /_____/\ /______/\
+\:::_ \ \\::::_\/_\:\ \\ \ \\:\ \    \:::_ \ \\::::__\/__
+ \:\ \ \ \\:\/___/\\:\ \\ \ \\:\ \    \:\ \ \ \\:\ /____/\
+  \:\ \ \ \\::___\/_\:\_/.:\ \\:\ \____\:\ \ \ \\:\\_  _\/
+   \:\/.:| |\:\____/\\ ..::/ / \:\/___/\\:\_\ \ \\:\_\ \ \
+    \____/_/ \_____\/ \___/_(   \_____\/ \_____\/ \_____\/
+==============================================================
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+KevinX -- 2023-6-1 1:00 PM
+--------------------------------------------------------------
+  - Created and linked repo to the great repo of holding
+
+KevinX -- 2023-6-3 4:50 PM
+--------------------------------------------------------------
+  - Created and added trivia api
+  - Created get_question command, allowing to get any random question from the trivia api
+  - Formatted data in form: ID:
+                            Question:
+                            Correct Answer:
+                            Incorrect Answer, Incorrect Answer, Incorrect Answer 

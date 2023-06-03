@@ -11,7 +11,7 @@ def get_question():
     correctAnswer= (api_dict[0])["correctAnswer"]
     incorrectAnswers = ''
     for i in range(len((api_dict[0])["incorrectAnswers"])):
-        incorrectAnswers = incorrectAnswers + (api_dict[0])["incorrectAnswers"][i] + ' '
+        incorrectAnswers = incorrectAnswers + (api_dict[0])["incorrectAnswers"][i] + ', '
     return id + ' \n' + question + ' \n' + correctAnswer + '\n' + incorrectAnswers
 
 for i in range(20):
