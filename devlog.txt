@@ -36,3 +36,8 @@ KevinX -- 2023-6-3 4:50 PM
 GordonM -- 2023-6-3 10:38 PM
 --------------------------------------------------------------
   - worked on home.html page
+
+kevinL -- 2023-06-04 15:57
+--------------------------------------------------------------
+ - created a room joining system that takes a 6 character room id
+ - created a method for randomly generating a unique 6 letter id 

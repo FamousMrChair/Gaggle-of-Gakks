@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script src="static/javascript/home.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Homepage</title>
@@ -12,13 +14,11 @@
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="card">
             <div class="card-body">
-                <form action="">
-                    <div class="mb-2 text-center" style="width:300px;">
-                        <label for="gamePin" class="form-label"></label><br>
-                        <input type="text" id="gamePin" name="gamePin" size="25" placeholder="Game PIN"><br>
-                    </div>
-                    <button class="btn btn-primary" type="submit">Enter</button> 
-                  </form>
+                <div class="mb-2 text-center" style="width:300px;">
+                    <label for="gamePin" class="form-label"></label><br>
+                    <input type="text" id="gamePin" name="gamePin" size="25" placeholder="Game PIN"><br>
+                </div>
+                <button class="btn btn-primary" type="submit" onclick="joinRoom()">Enter</button> 
             </div>
     </div>
     </div>
