@@ -44,6 +44,11 @@ kevinL -- 2023-06-04 15:57
 
 FEEDBACK
 --------------------------------------------------------------
+  - We need to be more specific about the data that's going to go into our 
+    data table for storing trivia sets
+  - One team suggested using a table to store game data and then dropping it 
+    after it has served its purpose
+  - We should put links to APIs
   - Overall pretty good and well thought out.
   - Project might be too ambitious
 
