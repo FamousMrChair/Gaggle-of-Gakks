@@ -8,16 +8,19 @@ def get_question():
     id = (api_dict[0])["id"]
     question = (api_dict[0])["question"]['text']
     correctAnswer= (api_dict[0])["correctAnswer"]
+    difficulty = (api_dict[0])["difficulty"]
     incorrectAnswers = []
     for i in range(len((api_dict[0])["incorrectAnswers"])):
-        incorrectAnswers = incorrectAnswers.append('(api_dict[0])["incorrectAnswers"][i]' + ', ')
+        incorrectAnswers.append((api_dict[0])["incorrectAnswers"][i] + ', ')
     dict = {}
     dict['id'] = id
+    dict['difficulty'] = difficulty
     dict['question'] = question
     dict['correctAnswer'] = correctAnswer
     dict['incorrectAnswers'] = incorrectAnswers
-    
-    return dict
 
+    return dict
+    
 for i in range(20):
     print(get_question())
+
