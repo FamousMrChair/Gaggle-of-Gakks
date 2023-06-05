@@ -18,6 +18,11 @@ gameRooms = {}
 def home():
     return render_template('home.html')
 
+@app.route("/create", methods=['GET', 'POST'])
+def create():
+    return render_template('create.html')
+
+
 @app.route('/socket')
 def socket():
     return render_template("socket.html")

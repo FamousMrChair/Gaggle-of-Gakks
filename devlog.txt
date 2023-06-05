@@ -41,3 +41,12 @@ kevinL -- 2023-06-04 15:57
 --------------------------------------------------------------
  - created a room joining system that takes a 6 character room id
  - created a method for randomly generating a unique 6 letter id 
+
+FEEDBACK
+--------------------------------------------------------------
+  - Overall pretty good and well thought out.
+  - Project might be too ambitious
+
+GordonM -- 2023-6-4 10:03 PM
+--------------------------------------------------------------
+  - created create page
