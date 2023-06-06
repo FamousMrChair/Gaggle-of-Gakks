@@ -66,3 +66,11 @@ kevinL -- 2023-06-04 22:18 PM
   - sockets break when clicking back button. needs investigating.
   - the above bug is now fixed, but the socket has to reconnect, and that takes quite a few seconds for some reason
   - the above bug is now fixed thanks to https://discourse.webflow.com/t/force-refresh-page-when-user-taps-browser-back-button/159352
+
+anjiniK -- 2023-6-4 10:45 PM
+--------------------------------------------------------------
+  - started setting up mulitplication mini game 
+    - numbers are randomly chosen
+    - can't get them to show up on the html page? tried for a while before giving up
+    - found how to replacce physical submit button with the enter key
+    
