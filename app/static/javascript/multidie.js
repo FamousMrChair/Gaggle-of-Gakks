@@ -19,6 +19,8 @@ function multiply() {
     AHead.innerHTML = a;
     numbers.append(AHead);
 
+    
+
 }
 
 multiply();

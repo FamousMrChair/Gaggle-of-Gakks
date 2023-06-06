@@ -40,6 +40,10 @@ def create():
         
     return render_template('create.html', gamePin = gamePin)
 
+@app.route('/multidie')
+def multidie():        
+    return render_template('multidie.html')
+
 @socketio.on('logUser')
 def logUser():
     # makes the client join the room of their userId. It's a unique room that will stay the same even if they refresh
