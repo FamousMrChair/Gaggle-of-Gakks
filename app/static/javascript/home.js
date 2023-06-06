@@ -74,9 +74,21 @@ function redirect(destination) {
 
 // redirects you to another window as if you were submitting a form
 function formAction(route, method, data) {
-    form = document.createElement('form')
+    // if the form already exist, get it
+    if (document.getElementById('redirectCreate')){
+        form = document.getElementById('redirectCreate')
+        //remove existing children
+        form.removeChild(form.firstChild)
+    }
+    // if the form doesn't exist, make one
+    else{
+        form = document.createElement('form')
+        document.body.appendChild(form)
+    }
+    
     form.setAttribute('action', route)
     form.setAttribute('method', method)
+    form.setAttribute('id', 'redirectCreate')
 
     input = document.createElement('input')
     input.setAttribute('hidden', true)
@@ -84,7 +96,6 @@ function formAction(route, method, data) {
     input.setAttribute('value', data['value'])
 
     form.appendChild(input)
-    document.body.appendChild(form)
 
     form.submit()
 }
