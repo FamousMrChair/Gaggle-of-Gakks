@@ -1,9 +1,8 @@
 var socket = io();
 
-function joinRoom() {
-    gamePin = document.getElementById('gamePin').value
-    console.log(gamePin)
-    socket.emit('joinRoom', gamePin)
+function joinRoom(roomId) {
+    console.log(roomId)
+    socket.emit('joinRoom', roomId)
 }
 socket.on('joinRoom', function(data) {
     if (data['success']) {
@@ -19,6 +18,73 @@ socket.on('joinRoom', function(data) {
 function createRoom() {
     socket.emit('createRoom')
 }
-socket.on('roomCreated', function(gamePin) {
+socket.on('createRoom', function(gamePin) {
     console.log("created room: " + gamePin)
+    //redirects user to url
+    formAction('/create', 'POST', {'name' : 'gamePin', 'value': gamePin})
 })
+
+function getUserId() {
+    socket.emit('getUserId', socket.id)
+}
+socket.on('getUserId', function(data) {
+    if (data['success']) {
+        console.log('you are logged in as ' + data['id'])
+    }
+    else {
+        console.log('no user id')
+    }
+})
+
+function getRooms() {
+    socket.emit('getRooms', socket.id)
+}
+socket.on('getRooms', function(data) {
+    console.log(data)
+})
+
+socket.on('connect', function() {
+    getUserId()
+    // make the user join the room of their userId (stored in session)
+    socket.emit('logUser')
+    initFile()
+})
+
+function initFile() {
+    file = document.getElementById('filename').innerHTML
+    console.log(file)
+    if (file == 'create.html') {
+        gamePin = document.getElementById('gamePin').innerHTML
+        joinRoom(gamePin)
+    }
+}
+
+socket.on('disconnect', function() {
+
+})
+
+socket.on('console.log', function(message) {
+    console.log(message)
+})
+
+// redirects you to another window
+function redirect(destination) {
+    window.location.href = destination
+}
+
+// redirects you to another window as if you were submitting a form
+function formAction(route, method, data) {
+    form = document.createElement('form')
+    form.setAttribute('action', route)
+    form.setAttribute('method', method)
+
+    input = document.createElement('input')
+    input.setAttribute('hidden', true)
+    input.setAttribute('name', data['name'])
+    input.setAttribute('value', data['value'])
+
+    form.appendChild(input)
+    document.body.appendChild(form)
+
+    form.submit()
+}
