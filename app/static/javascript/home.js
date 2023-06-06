@@ -59,9 +59,17 @@ function initFile() {
     }
 }
 
-socket.on('disconnect', function() {
-
-})
+/* If browser back button was used, flush cache */
+// code taken from https://discourse.webflow.com/t/force-refresh-page-when-user-taps-browser-back-button/159352
+// sockets will work immediately on reload, so we can reload when people access this from the back button
+(function () {
+	window.onpageshow = function(event) {
+        // event.persisted means loading the page from cache
+		if (event.persisted) {
+			window.location.reload();
+		}
+	};
+})();
 
 socket.on('console.log', function(message) {
     console.log(message)
