@@ -55,3 +55,12 @@ FEEDBACK
 GordonM -- 2023-6-4 10:03 PM
 --------------------------------------------------------------
   - created create page
+
+kevinL -- 2023-06-04 22:18 PM
+--------------------------------------------------------------
+  - made changes to the room joining system so users are now assigned a userId when
+    going to the root url. The userId currently persists across the browser 
+    because it is tied to session data
+  - allowed for auto-rejoining socket rooms when the user reconnects
+  - created various debugging methods in home.js 
+  - sockets break when clicking back button. needs investigating
