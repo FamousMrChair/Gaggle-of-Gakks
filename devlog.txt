@@ -73,4 +73,11 @@ anjiniK -- 2023-6-4 10:45 PM
     - numbers are randomly chosen
     - can't get them to show up on the html page? tried for a while before giving up
     - found how to replacce physical submit button with the enter key
-    
+  
+KevinX -- 2023-6-6 12:43 PM
+--------------------------------------------------------------
+  - Updated trivia api:
+    - Changed return format into a dictionary
+    - Added difficulty level parsing to the return
+  - Created api card for trivia API in notes-and-code repo
+  - Created minesweeper.py
