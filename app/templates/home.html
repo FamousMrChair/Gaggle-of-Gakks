@@ -3,7 +3,6 @@
   <head>
     <div hidden id="filename">home.html</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-    <script src="static/javascript/home.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Homepage</title>
@@ -12,17 +11,18 @@
   </head>
   <body style="background: rgb(56, 18, 114)">
 
-    <input type="submit" value="Create a game!" onclick="createRoom()">
+  <form action="/create" method="POST">
+    <input type="submit" value="Create a game!">
+  </form>
 
   <div class="container d-flex justify-content-center align-items-center text-center">
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="card">
             <div class="card-body">
                 <div class="mb-2 text-center" style="width:300px;">
-                    <label for="gamePin" class="form-label"></label><br>
-                    <input type="text" id="gamePin" style="height:40px;" name="gamePin" size="25" placeholder="Game PIN"><br>
+                    <input required type="text" id="gamePin" style="height:40px;" name="gamePin" size="25" placeholder="Game PIN"><br>
                 </div>
-                <button class="btn btn-primary" type="submit" onclick="joinRoom(document.getElementById('gamePin').value)">Enter</button> 
+                <button class="btn btn-primary" type="submit" id="submit">Enter</button> 
             </div>
     </div>
     </div>
@@ -32,6 +32,7 @@
             <h1 style="color:white">Kahooters!</h1>
     </div>
 
+    <script src="static/javascript/home.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   </body>
 </html>
