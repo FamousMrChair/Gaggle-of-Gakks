@@ -42,7 +42,7 @@ function updatePlayers() {
 
     gamePin = document.getElementById('gamePin').innerHTML
     // get new player list from server
-    socket.emit('updatePlayers'. gamePin)
+    socket.emit('updatePlayers', gamePin)
 
     //update html with updated player list
     socket.once('updatePlayers', function(data) {
