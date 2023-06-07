@@ -33,7 +33,7 @@ function removePlayer(name) {
     socket.emit('removePlayer', name)
 }
 
-function updatePlayers(data) {
+function updatePlayers() {
     // get and clear existing players
     team1 = document.getElementById('team1')
     team1.innerHTML = "team1"
