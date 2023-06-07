@@ -81,3 +81,11 @@ KevinX -- 2023-6-6 12:43 PM
     - Added difficulty level parsing to the return
   - Created api card for trivia API in notes-and-code repo
   - Created minesweeper.py
+
+kevinL -- 2023-06-07 01:57 AM
+--------------------------------------------------------------
+  - found out that session data and flask sockets do not go well together. websockets has no way of sending cookies
+  - late night code revisions to how rooms work 
+  - changed home.html and create.html to limit dependency on sockets 
+  - updated create.html 
+  - started structuring game data

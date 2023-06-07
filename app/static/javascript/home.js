@@ -1,84 +1,23 @@
-var socket = io();
+socket = io()
 
-function joinRoom(roomId) {
-    console.log(roomId)
-    socket.emit('joinRoom', roomId)
-}
-socket.on('joinRoom', function(data) {
-    if (data['success']) {
-        console.log(socket.id + " has joined the room: " + data['gamePin'])
-        //put code here to take them to the game page
-    }
-    else {
-        console.log('that room does not exist')
-        //put code here to display an error message
-    }
+submit = document.getElementById('submit')
+submit.addEventListener('click', ()=>{
+    // get pin
+    pin = document.getElementById('gamePin').value
+    // check if room exists by sending it to server
+    socket.emit('room_exists', pin, socket.id)
+    socket.once('room_exists', function(room_exists){
+        console.log(room_exists)
+        // if exists, go to /join
+        if (room_exists) {
+            formAction('/join', 'POST', {'name' : 'gamePin', 'value' : pin})
+        }
+        // else alert
+        else {
+            alert('that game does not exist')
+        }
+    })
 })
-
-function createRoom() {
-    socket.emit('createRoom')
-}
-socket.on('createRoom', function(gamePin) {
-    console.log("created room: " + gamePin)
-    //redirects user to url
-    formAction('/create', 'POST', {'name' : 'gamePin', 'value': gamePin})
-})
-
-function getUserId() {
-    socket.emit('getUserId', socket.id)
-}
-socket.on('getUserId', function(data) {
-    if (data['success']) {
-        console.log('you are logged in as ' + data['id'])
-    }
-    else {
-        console.log('no user id')
-    }
-})
-
-function getRooms() {
-    socket.emit('getRooms', socket.id)
-}
-socket.on('getRooms', function(data) {
-    console.log(data)
-})
-
-socket.on('connect', function() {
-    getUserId()
-    // make the user join the room of their userId (stored in session)
-    socket.emit('logUser')
-    initFile()
-})
-
-function initFile() {
-    file = document.getElementById('filename').innerHTML
-    console.log(file)
-    if (file == 'create.html') {
-        gamePin = document.getElementById('gamePin').innerHTML
-        joinRoom(gamePin)
-    }
-}
-
-/* If browser back button was used, flush cache */
-// code taken from https://discourse.webflow.com/t/force-refresh-page-when-user-taps-browser-back-button/159352
-// sockets will work immediately on reload, so we can reload when people access this from the back button
-(function () {
-	window.onpageshow = function(event) {
-        // event.persisted means loading the page from cache
-		if (event.persisted) {
-			window.location.reload();
-		}
-	};
-})();
-
-socket.on('console.log', function(message) {
-    console.log(message)
-})
-
-// redirects you to another window
-function redirect(destination) {
-    window.location.href = destination
-}
 
 // redirects you to another window as if you were submitting a form
 function formAction(route, method, data) {
@@ -100,10 +39,21 @@ function formAction(route, method, data) {
 
     input = document.createElement('input')
     input.setAttribute('hidden', true)
-    input.setAttribute('name', data['name'])
-    input.setAttribute('value', data['value'])
+    if ('name' in data)
+        input.setAttribute('name', data['name'])
+    if ('value in data')
+        input.setAttribute('value', data['value'])
 
     form.appendChild(input)
 
     form.submit()
 }
+
+(function () {
+	window.onpageshow = function(event) {
+        // event.persisted means loading the page from cache
+		if (event.persisted) {
+			window.location.reload();
+		}
+	};
+})();

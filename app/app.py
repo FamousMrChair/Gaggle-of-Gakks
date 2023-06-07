@@ -12,43 +12,70 @@ app.config["SECRET_KEY"] = "superdupersecretkey"
 socketio = SocketIO(app)
 
 # these dicts exist to keep track of existing ids in the 1 in 2 billion event that the same id is generated twice
-gameRooms = {}
-users = {}
+gameRooms = {
+    # gamePin : {
+    #   'players' : ['kevin', 'kevin', 'kevanjini', 'kevorden'],
+    #    
+    # }
+}
 
 @app.route("/", methods = ['GET', 'POST'])
-def home():
-    # generate a userId if the user does not have one
-    if not 'userId' in session:
-        userId='user-' + generatePin()
-        # keep generating until unique
-        while userId in users:
-            userId ='user-' + generatePin()
-        session['userId'] = userId
-    else:
-        # if it does exist, then get userId
-        userId = session['userId']
-        
+def home():     
     return render_template('home.html')
-
-# @app.route("/create", methods=['GET', 'POST'])
-# def create():
-#     return render_template('create.html')
 
 @app.route('/create', methods=['POST'])
 def create():
-    gamePin = request.form['gamePin']
-        
+    # generate the pin and add it to the list of games
+    gamePin = generatePin()
+    gameRooms.update({gamePin : {'players' : []}})
+
     return render_template('create.html', gamePin = gamePin)
+
+@app.route('/join', methods=['POST'])
+def join():
+    gamePin = request.form['gamePin']
+    if gamePin in gameRooms:
+        return render_template('create.html', gamePin = gamePin)
+    return 'an unexpected error occurred'
 
 @app.route('/multidie')
 def multidie():        
     return render_template('multidie.html')
 
-@socketio.on('logUser')
-def logUser():
-    # makes the client join the room of their userId. It's a unique room that will stay the same even if they refresh
-    join_room(session['userId'])
+# socket ------------------------------------------------------------------
+@socketio.on('room_exists')
+def room_exists(room, socket):
+    room_exists = room in gameRooms
+    print(room_exists)
+    socketio.emit('room_exists', room_exists, to=socket)
 
+@socketio.on('addPlayer')
+def addPlayer(name, gamePin):
+    # get the game room
+    game = dict(gameRooms[gamePin])
+    # add the player into the list of names
+    players = list(game['players'])
+    players.append(name)
+
+    # update the dictionary
+    game.update({'players' : players})
+
+@socketio.on('removePlayer')
+def addPlayer(name, gamePin):
+    # get the game room
+    game = dict(gameRooms[gamePin])
+    # add the player into the list of names
+    players = list(game['players'])
+    players.append(name)
+
+    # update the dictionary
+    game.update({'players' : players})
+
+@socketio.on('updatePlayers')
+def updatePlayers(gamePin):
+    socketio.emit()
+
+# debug --------------------------------------------------------------------
 @socketio.on('getUserId')
 def getUserId(client):
     if 'userId' in session:
@@ -61,33 +88,6 @@ def getUserId(client):
 def getRooms(id):
     socketio.emit('getRooms', rooms(id))
 
-@socketio.on('joinRoom')
-def joinRoom(gamePin):
-    print(gamePin)
-    gamePin = str(gamePin)
-    # if the game room does not exist, tell client it was unsuccessful
-    print(gameRooms.keys())
-    print(gamePin)
-    if not gamePin in gameRooms:
-        socketio.emit('joinRoom', {'success' : False})
-    # if the game room does exist, tell client it was successful
-    else:
-        join_room(gamePin)
-        socketio.emit('joinRoom', {'success' : True, 'gamePin' : gamePin}, to=session['userId'])
-
-@socketio.on('createRoom')
-def createRoom():
-    print('creating room')
-    gameData = "pretend this is game data"
-    # generate a random 6 character gamePin
-    gamePin = generatePin()
-    # if the pin does exist (1 in over 2 billion chance), re-generate
-    while gamePin in gameRooms:
-        gamePin = generatePin()
-    #when you have a unique pin, put it into the dictionary
-    gameRooms.update({gamePin : gameData})
-    socketio.emit('createRoom', gamePin, to=session['userId'])
-
 def generatePin():
     pin = ''
     for i in range(6):
@@ -96,5 +96,4 @@ def generatePin():
 
 if __name__ == '__main__':
     gameRooms.clear()
-    users.clear()
     socketio.run(app, debug = True)

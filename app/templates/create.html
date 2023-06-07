@@ -3,29 +3,53 @@
   <head>
     <div hidden id="filename">create.html</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-    <script src="static/javascript/home.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Create a lobby</title>
     <link rel="stylesheet" href="../static/css/global.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   </head>
-  <body>
-    <h2 class="text-center" id="gamePin">{{gamePin}}</h2>
-    <br>
-    <div class="row mx-auto" style="width: 70%;">
-      <div class="card p-3 d-inline-block mx-auto" style="width: 40%;">
-        <div class="card-body text-center">
-          Team 1
+  <body style="background: rgb(56, 18, 114)">
+    
+    <div class="container d-flex justify-content-center align-items-center text-center" id="teamsDiv" style="visibility: hidden;">
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="row mx-auto"  style="width: 800px;">
+                <div class="card p-3 d-inline-block mx-auto" style="width: 300px; background-color:white;">
+                    <div class="card-body text-center" id="team1">
+                    Team 1
+                    </div>
+                </div>
+                <div class="card p-3 d-inline-block mx-auto" style="width: 300px; background-color: white;">
+                    <div class="card-body text-center" id="team2">
+                    Team 2
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="card p-3 d-inline-block mx-auto" style="width: 40%; margin: auto;">
-        <div class="card-body text-center">
-          Team 1
-        </div>
-      </div>
     </div>
 
+    <div class="container d-flex justify-content-center align-items-center text-center" height="50px" id="pinDiv" style="visibility: hidden;">
+        <h1 style="color:white" id="gamePin">{{gamePin}}</h1>
+    </div>
+
+    <div class="container d-flex justify-content-center align-items-center text-center" id="nameDiv">
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-2 text-center" style="width:300px;">
+                        <input required type="text" id="name" style="height:40px;" name="name" size="25" placeholder="Name"><br>
+                    </div>
+                    <button class="btn btn-primary" type="submit" id="submit">Enter</button> 
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container d-flex justify-content-center align-items-center text-center" height="50px" id="titleDiv">
+            <h1 style="color:white">Kahooters!</h1>
+    </div>
+    
+    <script src="static/javascript/create.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   </body>
 </html>
