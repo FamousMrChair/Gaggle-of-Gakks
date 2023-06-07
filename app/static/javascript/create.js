@@ -8,8 +8,11 @@ submit.addEventListener('click', ()=> {
     if (name.trim() == '') {
         alert('please enter a name')
     }
+    // (TO DO) check if name already exists ------------------------------------------------
     else {
         playerName = name
+        addPlayer(playerName)
+        updatePlayers()
         document.getElementById('nameDiv').style.visibility = 'hidden'
         document.getElementById('titleDiv').style.visibility = 'hidden'
         document.getElementById('teamsDiv').style.visibility = 'visible'
@@ -17,39 +20,52 @@ submit.addEventListener('click', ()=> {
     }
 })
 
-// finish these later
+// helper functions ------------------------------------------------------
 function addPlayer(name) {
     gamePin = document.getElementById('gamePin').innerHTML
+    // adding players is handled by server
     socket.emit('addPlayer', name, gamePin)
 }
 
 function removePlayer(name) {
+    gamePin = document.getElementById('gamePin').innerHTML
+    // removing players is handled by server
     socket.emit('removePlayer', name)
 }
 
 function updatePlayers(data) {
     // get and clear existing players
     team1 = document.getElementById('team1')
-    team1.innerHTML = ""
+    team1.innerHTML = "team1"
     team2 = document.getElementById('team2')
-    team2.innerHTML = ""
+    team2.innerHTML = "team2"
 
-    br = document.createElement('br')
-    // iterate and list our each player
-    data['team1'].forEach(player => {
-        team1.appendChild(br)
-        team1.innerHTML += player
-    });
+    gamePin = document.getElementById('gamePin').innerHTML
+    // get new player list from server
+    socket.emit('updatePlayers'. gamePin)
 
-    data['team2'].forEach(player => {
-        team2.appendChild(br)
-        team2.innerHTML += player
-    });
+    //update html with updated player list
+    socket.once('updatePlayers', function(data) {
+        console.log('team1' + data['team1'])
+        console.log('team2' + data['team2'])
+
+        br = document.createElement('br')
+        // iterate and list out each player
+        data['team1'].forEach(player => {
+            team1.appendChild(br)
+            team1.innerHTML += player
+        });
+
+        data['team2'].forEach(player => {
+            team2.appendChild(br)
+            team2.innerHTML += player
+        });
+    })
 }
 
 socket.on('disconnect', function() {
     if (!(playerName == null)) {
-        
+        // remove playerName
     }
 })
 

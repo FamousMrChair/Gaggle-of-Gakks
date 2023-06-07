@@ -15,6 +15,8 @@ socketio = SocketIO(app)
 gameRooms = {
     # gamePin : {
     #   'players' : ['kevin', 'kevin', 'kevanjini', 'kevorden'],
+    #   'team1' : ['kevin', 'kevin']
+    #   'team2' : ['kevanjini', 'kevorden']
     #    
     # }
 }
@@ -27,7 +29,7 @@ def home():
 def create():
     # generate the pin and add it to the list of games
     gamePin = generatePin()
-    gameRooms.update({gamePin : {'players' : []}})
+    gameRooms.update({gamePin : {'players' : [], 'team1':[], 'team2':[]}})
 
     return render_template('create.html', gamePin = gamePin)
 
@@ -53,27 +55,73 @@ def room_exists(room, socket):
 def addPlayer(name, gamePin):
     # get the game room
     game = dict(gameRooms[gamePin])
-    # add the player into the list of names
+    # add the player into the list of players
     players = list(game['players'])
     players.append(name)
 
+    # get the teams
+    team1 = game['team1']
+    team2 = game['team2']
+    # put the player into a team
+    if len(game['team2']) < len(game['team1']):
+        team2.append(name)
+    else:
+        team1.append(name)
+
     # update the dictionary
-    game.update({'players' : players})
+    game.update({'players' : players, 'team1':team1, 'team2':team2})
 
 @socketio.on('removePlayer')
-def addPlayer(name, gamePin):
+def removePlayer(name, gamePin):
     # get the game room
     game = dict(gameRooms[gamePin])
     # add the player into the list of names
     players = list(game['players'])
-    players.append(name)
+    players.remove(name)
+
+    # get the teams
+    team1 = game['team1']
+    team2 = game['team2']
+
+    # remove the player
+    try:
+        team1.remove(name)
+    except ValueError:
+        print('that player is not in team1')
+
+    try:
+        team2.remove(name)
+    except ValueError:
+        print('that player is not in team2')
+
+    # (TO DO) enforce unique usernames --------------------------------------------------
+
+    # reshuffle teams for evenness
+    if len(team1) > len(team2) + 1:
+        # if team 1 has 2 or more players than team2, remove the first player in team 1 and add them again
+        switchPlayer = team1[0]
+        removePlayer(switchPlayer, gamePin)
+        addPlayer(switchPlayer, gamePin)
+    if len(team2) > len(team1) + 1:
+        switchPlayer = team2[0]
+        removePlayer(switchPlayer, gamePin)
+        addPlayer(switchPlayer, gamePin)
+    
 
     # update the dictionary
-    game.update({'players' : players})
+    game.update({'players' : players, 'team1':team1, 'team2':team2})
 
 @socketio.on('updatePlayers')
 def updatePlayers(gamePin):
-    socketio.emit()
+    # get the game room
+    game = dict(gameRooms[gamePin])
+
+    # get the teams
+    team1 = game['team1']
+    team2 = game['team2']
+
+    # broadcast the updated rooms
+    socketio.emit('updatePlayers', {'team1':team1, 'team2':team2})
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')
