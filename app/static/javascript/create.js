@@ -83,9 +83,37 @@ socket.on('updatePlayers', function(data) {
 startGameButton = document.getElementById('startGameButton')
 startGameButton.addEventListener('click', function() {
     // (TO DO) make this start button only available to the creator
-    socket.emit('startGame')
-
+    // (1) tell server to start game
+    socket.emit('startGame', gamePin)
 })
+// (2) server sends a message to all sockets that the game is starting. client receives this message
+socket.on('startGame', function() {
+    // (3) socket sends their name and gamePin in a form to /game
+    form = document.createElement('form')
+    form.setAttribute('action', '/game')
+    form.setAttribute('method', 'POST')
+    form.style.visibility = 'hidden'
+
+    myName = document.createElement('input')
+    myName.setAttribute('type', 'hidden')
+    myName.setAttribute('name', 'name')
+    myName.setAttribute('value', document.getElementById('storedName').innerHTML)
+
+    pin = document.createElement('input')
+    pin.setAttribute('type', 'hidden')
+    pin.setAttribute('name', 'gamePin')
+    pin.setAttribute('value', gamePin)
+
+    form.appendChild(myName)
+    form.appendChild(pin)
+    
+    document.body.appendChild(form)
+    form.submit()
+})
+
+// (4) /game renders html with all players' names and their team
+// (5) game.js sends a message to server, which then stores their socket.id for 1 to 1 communication
+// name : {'socket' : kjugabaijagf, 'score' : 100, 'team' : team1}
 
 function getRooms() {
     socket.emit('getRooms', socket.id)
@@ -93,4 +121,6 @@ function getRooms() {
         console.log(rooms)
     })
 }
+
+
 

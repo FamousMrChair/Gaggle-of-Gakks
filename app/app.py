@@ -44,6 +44,18 @@ def join():
         return render_template('create.html', gamePin = gamePin)
     return 'an unexpected error occurred'
 
+@app.route('/game', methods=['POST'])
+def game():
+    name = request.form['name']
+    gamePin = request.form['gamePin']
+    if name in gameRooms[gamePin]['team1']:
+        team = 'team1'
+    else:
+        team = 'team2'
+
+    return render_template('game.html', name = name, team = team)
+
+
 @app.route('/multidie')
 def multidie():        
     return render_template('multidie.html')
@@ -159,6 +171,10 @@ def updatePlayers(gamePin):
 
     # broadcast the updated rooms
     socketio.emit('updatePlayers', {'team1':team1, 'team2':team2}, to=gamePin)
+
+@socketio.on('startGame')
+def startGame(gamePin):
+    socketio.emit('startGame', to=gamePin)
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')
