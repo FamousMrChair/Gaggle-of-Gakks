@@ -12,16 +12,15 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "superdupersecretkey"
 socketio = SocketIO(app)
 
-gameRooms = 'https://jsonblob.com/api/gameRooms/1114324801761329152'
-# these dicts exist to keep track of existing ids in the 1 in 2 billion event that the same id is generated twice
-# gameRooms = {
+# gameRooms = 'https://jsonblob.com/api/gameRooms/1114324801761329152'
+gameRooms = {
     # gamePin : {
     #   'players' : ['kevin', 'kevin', 'kevanjini', 'kevorden'],
     #   'team1' : ['kevin', 'kevin']
     #   'team2' : ['kevanjini', 'kevorden']
     #    
     # }
-# }
+}
 
 @app.route("/", methods = ['GET', 'POST'])
 def home():     
@@ -31,8 +30,8 @@ def home():
 def create():
     # generate the pin and add it to the list of games
     gamePin = generatePin()
-    update(gameRooms, {gamePin : {'players' : [], 'team1':[], 'team2':[]}})
-    #gameRooms.update({gamePin : {'players' : [], 'team1':[], 'team2':[]}})
+    #update(gameRooms, {gamePin : {'players' : [], 'team1':[], 'team2':[]}})
+    gameRooms.update({gamePin : {'players' : [], 'team1':[], 'team2':[]}})
     print('========== game created ==========')
 
     return render_template('create.html', gamePin = gamePin)
@@ -40,7 +39,8 @@ def create():
 @app.route('/join', methods=['POST'])
 def join():
     gamePin = request.form['gamePin']
-    if gamePin in get(gameRooms):
+    # if gamePin in get(gameRooms):
+    if gamePin in gameRooms:
         return render_template('create.html', gamePin = gamePin)
     return 'an unexpected error occurred'
 
@@ -51,7 +51,8 @@ def multidie():
 # socket ------------------------------------------------------------------
 @socketio.on('room_exists')
 def room_exists(room, socket):
-    room_exists = room in get(gameRooms)
+    #room_exists = room in get(gameRooms)
+    room_exists = room in gameRooms
     print(room_exists)
     socketio.emit('room_exists', room_exists, to=socket)
 
@@ -60,7 +61,8 @@ def addPlayer(name, gamePin):
     # join the room so they can receive broadcasts from server
     join_room(gamePin)
     # get the game room
-    game = dict(get(gameRooms)[gamePin])
+    #game = dict(get(gameRooms)[gamePin])
+    game = dict(gameRooms[gamePin])
     # add the player into the list of players
     players = list(game['players'])
     players.append(name)
@@ -76,14 +78,16 @@ def addPlayer(name, gamePin):
 
     # update the dictionary
     game.update({'players' : players, 'team1':team1, 'team2':team2})
-    update(gameRooms, {gamePin : game})
+    #update(gameRooms, {gamePin : game})
+    gameRooms.update({gamePin : game})
     print('added player into game room with key ' + gamePin)
     print(game)
 
 @socketio.on('removePlayer')
 def removePlayer(name, gamePin):
     # get the game room
-    game = dict(get(gameRooms)[gamePin])
+    #game = dict(get(gameRooms)[gamePin])
+    game = dict(gameRooms[gamePin])
     # add the player into the list of names
     players = list(game['players'])
     players.remove(name)
@@ -118,15 +122,16 @@ def removePlayer(name, gamePin):
     
 
     # update the dictionary
-    update(gameRooms, {gamePin : game})
-    # game.update({'players' : players, 'team1':team1, 'team2':team2})
+    #update(gameRooms, {gamePin : game})
+    game.update({'players' : players, 'team1':team1, 'team2':team2})
 
 @socketio.on('updatePlayers')
 def updatePlayers(gamePin):
     print('========== updatePlayers received ==========')
 
     # get the game room
-    game = dict(get(gameRooms)[gamePin])
+    #game = dict(get(gameRooms)[gamePin])
+    game = dict(gameRooms[gamePin])
     print('got game room with key ' + gamePin)
     print(game)
 
@@ -157,5 +162,6 @@ def generatePin():
     return pin
 
 if __name__ == '__main__':
-    clear(gameRooms)
+    #clear(gameRooms)
+    gameRooms.clear()
     socketio.run(app, debug = True)
