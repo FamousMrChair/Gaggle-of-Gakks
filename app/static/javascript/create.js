@@ -26,6 +26,7 @@ submit.addEventListener('click', ()=> {
                 document.getElementById('titleDiv').style.visibility = 'hidden'
                 document.getElementById('teamsDiv').style.visibility = 'visible'
                 document.getElementById('pinDiv').style.visibility = 'visible'
+                document.getElementById('startGame').style.visibility = 'visible'
 
                 document.getElementById('storedName').innerHTML = name
             }
