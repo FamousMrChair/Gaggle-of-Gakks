@@ -95,3 +95,7 @@ kevinL -- 2023-06-07 22:24 AM
   - changed create.html to use a window.onbeforeunload event 
   - embedded additional data into create.html, which gets emitted to server on disconnect 
   - finally made people disappear from rooms when they disconnect
+
+kevinL -- 2023-06-08 16:57
+--------------------------------------------------------------
+  - names now must be unique

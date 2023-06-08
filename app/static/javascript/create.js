@@ -7,20 +7,42 @@ submit.addEventListener('click', ()=> {
     var name = document.getElementById('name').value 
     if (name.trim() == '') {
         alert('please enter a name')
-    }
-    // (TO DO) check if name already exists ------------------------------------------------
-    else {
-        playerName = name
-        addPlayer(playerName)
-        updatePlayers()
-        document.getElementById('nameDiv').style.visibility = 'hidden'
-        document.getElementById('titleDiv').style.visibility = 'hidden'
-        document.getElementById('teamsDiv').style.visibility = 'visible'
-        document.getElementById('pinDiv').style.visibility = 'visible'
+    } 
+    else{
+        gamePin = document.getElementById('gamePin').innerHTML
+        socket.emit('uniqueName', name, gamePin)
+        socket.once('uniqueName', function(bool) {
+            uniqueName = bool
+            console.log(!uniqueName)
+            if (!uniqueName) {
+                alert('that name is taken')
+                console.log('that name is taken')
+            } 
+            else {
+                playerName = name
+                addPlayer(playerName)
+                updatePlayers()
+                document.getElementById('nameDiv').style.visibility = 'hidden'
+                document.getElementById('titleDiv').style.visibility = 'hidden'
+                document.getElementById('teamsDiv').style.visibility = 'visible'
+                document.getElementById('pinDiv').style.visibility = 'visible'
 
-        document.getElementById('storedName').innerHTML = name
+                document.getElementById('storedName').innerHTML = name
+            }
+        })
     }
 })
+
+function uniqueName(name) {
+    bool = true
+    gamePin = document.getElementById('gamePin').innerHTML
+    socket.emit('uniqueName', name, gamePin)
+    socket.once('uniqueName', function(boolean) {
+        bool = boolean
+        console.log(bool)
+    })
+    return bool
+}
 
 // helper functions ------------------------------------------------------
 function addPlayer(name) {

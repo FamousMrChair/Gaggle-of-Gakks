@@ -58,6 +58,7 @@ def room_exists(room, socket):
 
 @socketio.on('addPlayer')
 def addPlayer(name, gamePin):
+    print('========== addPlayer received ==========')
     # join the room so they can receive broadcasts from server
     join_room(gamePin)
     # get the game room
@@ -85,6 +86,7 @@ def addPlayer(name, gamePin):
 
 @socketio.on('removePlayer')
 def removePlayer(name, gamePin):
+    print('========== removePlayer received ==========')
     # name = data['name']
     # gamePin = data['gamePin']
     # get the game room
@@ -131,12 +133,15 @@ def removePlayer(name, gamePin):
     print(game)
     socketio.emit('updatePlayers', {'team1':team1, 'team2':team2}, to=gamePin)
 
-@socketio.on('playerDC') 
-def playerDisconnected(data):
-    print(data['name'] + ' disconnected from ' + data['gamePin'])
-
-    removePlayer(data['name'], data['gamePin'])
-    updatePlayers(data['gamePin'])
+@socketio.on('uniqueName')
+def uniqueName(name, gamePin):
+    print(name)
+    print(gamePin)
+    print('========== checking for unique name ==========')
+    game = gameRooms[gamePin]
+    uniqueName = not(name in game['players'])
+    print(uniqueName)
+    socketio.emit('uniqueName', uniqueName, to=request.sid)
 
 @socketio.on('updatePlayers')
 def updatePlayers(gamePin):
