@@ -34,40 +34,50 @@ function removePlayer(name) {
 }
 
 function updatePlayers() {
+    // get game PIN
+    gamePin = document.getElementById('gamePin').innerHTML
+    // get new player list from server
+    socket.emit('updatePlayers', gamePin)
+}
+// update html with updated player list
+// this is outside the function because we want this to be run everytime the server emits this event
+socket.on('updatePlayers', function(data) {
     // get and clear existing players
     team1 = document.getElementById('team1')
     team1.innerHTML = "team1"
     team2 = document.getElementById('team2')
     team2.innerHTML = "team2"
 
+    console.log('team1: ' + data['team1'])
+    console.log('team2: ' + data['team2'])
+
+    br = document.createElement('br')
+    // iterate and list out each player
+    data['team1'].forEach(player => {
+        team1.appendChild(br)
+        team1.innerHTML += player
+    });
+
+    data['team2'].forEach(player => {
+        team2.appendChild(br)
+        team2.innerHTML += player
+    });
+})
+
+// socket.on('disconnect', function() {
+//     gamePin = document.getElementById('gamePin').innerHTML
+//     removePlayer(playerName, gamePin)
+//     updatePlayers()
+//     console.log('disconnected')
+// })
+
+function getRooms() {
     gamePin = document.getElementById('gamePin').innerHTML
-    // get new player list from server
-    socket.emit('updatePlayers', gamePin)
-
-    //update html with updated player list
-    socket.once('updatePlayers', function(data) {
-        console.log('team1' + data['team1'])
-        console.log('team2' + data['team2'])
-
-        br = document.createElement('br')
-        // iterate and list out each player
-        data['team1'].forEach(player => {
-            team1.appendChild(br)
-            team1.innerHTML += player
-        });
-
-        data['team2'].forEach(player => {
-            team2.appendChild(br)
-            team2.innerHTML += player
-        });
+    socket.emit('getRooms', socket.id)
+    socket.once('getRooms', function(rooms){
+        console.log(rooms)
     })
 }
-
-socket.on('disconnect', function() {
-    if (!(playerName == null)) {
-        // remove playerName
-    }
-})
 
 // socket.on('connect', function() {
 //     updatePlayers()

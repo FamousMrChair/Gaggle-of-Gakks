@@ -21,6 +21,6 @@ def get_question():
 
     return dict
     
-for i in range(20):
-    print(get_question())
+# for i in range(20):
+#     print(get_question())
 
