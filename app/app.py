@@ -1,8 +1,7 @@
 # this file is for handling server to client communication
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
 import random
-from jsonblob import get, update, clear
 
 CHARACTERS = ['1','2','3','4','5','6','7','8','9','0',
               'A','B','C','D','E','F','G','H','I','J',
@@ -47,6 +46,12 @@ def join():
 @app.route('/multidie')
 def multidie():        
     return render_template('multidie.html')
+
+
+@app.route('/game')
+def game():
+    audio_file = url_for('static', filename='kahootMusic.mp3')
+    return render_template('game.html', audio_file= audio_file)
 
 # socket ------------------------------------------------------------------
 @socketio.on('room_exists')

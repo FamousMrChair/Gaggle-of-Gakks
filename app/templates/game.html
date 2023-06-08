@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
-    <script src="static/javascript/home.js"></script>
+    <script src="static/javascript/game.js"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Game</title>
@@ -48,14 +48,14 @@
                     </div>
                     <div class="col">
                         test
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
     </div>
 
-    <audio controls autoplay>
-        <source src="kahootMusic.mp3" type="audio/mpeg">
+    <audio id="audio" controls autoplay loop>
+        <source src="{{ audio_file}}" type="audio/mpeg">
       </audio>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
