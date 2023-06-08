@@ -89,3 +89,9 @@ kevinL -- 2023-06-07 01:57 AM
   - changed home.html and create.html to limit dependency on sockets 
   - updated create.html 
   - started structuring game data
+
+kevinL -- 2023-06-07 22:24 AM
+--------------------------------------------------------------
+  - changed create.html to use a window.onbeforeunload event 
+  - embedded additional data into create.html, which gets emitted to server on disconnect 
+  - finally made people disappear from rooms when they disconnect
