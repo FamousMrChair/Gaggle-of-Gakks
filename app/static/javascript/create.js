@@ -1,5 +1,5 @@
 socket = io()
-var playerName;
+gamePin = document.getElementById('gamePin').innerHTML
 
 // prompt for name. When name is given, reveal the player list
 submit = document.getElementById('submit')
@@ -9,7 +9,6 @@ submit.addEventListener('click', ()=> {
         alert('please enter a name')
     } 
     else{
-        gamePin = document.getElementById('gamePin').innerHTML
         socket.emit('uniqueName', name, gamePin)
         socket.once('uniqueName', function(bool) {
             uniqueName = bool
@@ -19,8 +18,7 @@ submit.addEventListener('click', ()=> {
                 console.log('that name is taken')
             } 
             else {
-                playerName = name
-                addPlayer(playerName)
+                addPlayer(name)
                 updatePlayers()
                 document.getElementById('nameDiv').style.visibility = 'hidden'
                 document.getElementById('titleDiv').style.visibility = 'hidden'
@@ -35,32 +33,25 @@ submit.addEventListener('click', ()=> {
 })
 
 function uniqueName(name) {
-    bool = true
-    gamePin = document.getElementById('gamePin').innerHTML
     socket.emit('uniqueName', name, gamePin)
-    socket.once('uniqueName', function(boolean) {
-        bool = boolean
+    socket.once('uniqueName', function(bool) {
         console.log(bool)
+        return bool
     })
-    return bool
 }
 
 // helper functions ------------------------------------------------------
 function addPlayer(name) {
-    gamePin = document.getElementById('gamePin').innerHTML
     // adding players is handled by server
     socket.emit('addPlayer', name, gamePin)
 }
 
 function removePlayer(name) {
-    gamePin = document.getElementById('gamePin').innerHTML
     // removing players is handled by server
     socket.emit('removePlayer', name)
 }
 
 function updatePlayers() {
-    // get game PIN
-    gamePin = document.getElementById('gamePin').innerHTML
     // get new player list from server
     socket.emit('updatePlayers', gamePin)
 }
@@ -89,28 +80,17 @@ socket.on('updatePlayers', function(data) {
     });
 })
 
-// window.beforeunload = function() {
-//     gamePin = document.getElementById('gamePin').innerHTML
-//     removePlayer(playerName)
-//     updatePlayers()
-// }
+startGameButton = document.getElementById('startGameButton')
+startGameButton.addEventListener('click', function() {
+    // (TO DO) make this start button only available to the creator
+    socket.emit('startGame')
 
-// socket.on('disconnect', function() {
-//     gamePin = document.getElementById('gamePin').innerHTML
-//     removePlayer(playerName, gamePin)
-//     updatePlayers()
-//     console.log('disconnected')
-// })
+})
 
 function getRooms() {
-    gamePin = document.getElementById('gamePin').innerHTML
     socket.emit('getRooms', socket.id)
     socket.once('getRooms', function(rooms){
         console.log(rooms)
     })
 }
-
-// socket.on('connect', function() {
-//     updatePlayers()
-// })
 
