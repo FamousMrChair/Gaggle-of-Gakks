@@ -17,6 +17,8 @@ submit.addEventListener('click', ()=> {
         document.getElementById('titleDiv').style.visibility = 'hidden'
         document.getElementById('teamsDiv').style.visibility = 'visible'
         document.getElementById('pinDiv').style.visibility = 'visible'
+
+        document.getElementById('storedName').innerHTML = name
     }
 })
 
@@ -63,6 +65,12 @@ socket.on('updatePlayers', function(data) {
         team2.innerHTML += player
     });
 })
+
+// window.beforeunload = function() {
+//     gamePin = document.getElementById('gamePin').innerHTML
+//     removePlayer(playerName)
+//     updatePlayers()
+// }
 
 // socket.on('disconnect', function() {
 //     gamePin = document.getElementById('gamePin').innerHTML

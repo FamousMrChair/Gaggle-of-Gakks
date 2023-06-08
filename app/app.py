@@ -85,6 +85,8 @@ def addPlayer(name, gamePin):
 
 @socketio.on('removePlayer')
 def removePlayer(name, gamePin):
+    # name = data['name']
+    # gamePin = data['gamePin']
     # get the game room
     #game = dict(get(gameRooms)[gamePin])
     game = dict(gameRooms[gamePin])
@@ -99,31 +101,42 @@ def removePlayer(name, gamePin):
     # remove the player
     try:
         team1.remove(name)
+        print('player was removed from team1')
     except ValueError:
         print('that player is not in team1')
 
     try:
         team2.remove(name)
+        print('player was removed from team2')
     except ValueError:
         print('that player is not in team2')
 
     # (TO DO) enforce unique usernames --------------------------------------------------
 
     # reshuffle teams for evenness
-    if len(team1) > len(team2) + 1:
-        # if team 1 has 2 or more players than team2, remove the first player in team 1 and add them again
-        switchPlayer = team1[0]
-        removePlayer(switchPlayer, gamePin)
-        addPlayer(switchPlayer, gamePin)
-    if len(team2) > len(team1) + 1:
-        switchPlayer = team2[0]
-        removePlayer(switchPlayer, gamePin)
-        addPlayer(switchPlayer, gamePin)
+    # if len(team1) > len(team2) + 1:
+    #     # if team 1 has 2 or more players than team2, remove the first player in team 1 and add them again
+    #     switchPlayer = team1[0]
+    #     removePlayer(switchPlayer, gamePin)
+    #     addPlayer(switchPlayer, gamePin)
+    # if len(team2) > len(team1) + 1:
+    #     switchPlayer = team2[0]
+    #     removePlayer(switchPlayer, gamePin)
+    #     addPlayer(switchPlayer, gamePin)
     
 
     # update the dictionary
     #update(gameRooms, {gamePin : game})
     game.update({'players' : players, 'team1':team1, 'team2':team2})
+    print(game)
+    socketio.emit('updatePlayers', {'team1':team1, 'team2':team2}, to=gamePin)
+
+@socketio.on('playerDC') 
+def playerDisconnected(data):
+    print(data['name'] + ' disconnected from ' + data['gamePin'])
+
+    removePlayer(data['name'], data['gamePin'])
+    updatePlayers(data['gamePin'])
 
 @socketio.on('updatePlayers')
 def updatePlayers(gamePin):
@@ -140,7 +153,7 @@ def updatePlayers(gamePin):
     team2 = game['team2']
 
     # broadcast the updated rooms
-    socketio.emit('updatePlayers', {'team1':team1, 'team2':team2})
+    socketio.emit('updatePlayers', {'team1':team1, 'team2':team2}, to=gamePin)
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')
@@ -160,6 +173,12 @@ def generatePin():
     for i in range(6):
         pin += random.choice(CHARACTERS)
     return pin
+
+@socketio.on('test')
+def test(message, m):
+    print('message received:')
+    print(message)
+    print(m)
 
 if __name__ == '__main__':
     #clear(gameRooms)
