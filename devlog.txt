@@ -103,3 +103,8 @@ kevinL -- 2023-06-08 16:57
 gordonM-- 2023-06-08 18:09
 --------------------------------------------------------------
 - trying to make audio work
+
+kevinL -- 2023-06-08 23:16
+--------------------------------------------------------------
+  - trivia set is now generated on creating a room 
+  - trivia questions and answer choices now show on game page
