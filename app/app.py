@@ -15,9 +15,11 @@ socketio = SocketIO(app)
 gameRooms = {
     # gamePin : {
     #   'players' : ['kevin', 'kevin', 'kevanjini', 'kevorden'],
-    #   'team1' : ['kevin', 'kevin']
-    #   'team2' : ['kevanjini', 'kevorden']
-    #    
+    #   'team1' : ['kevin', 'kevin'],
+    #   'team2' : ['kevanjini', 'kevorden'],
+    #   'sockets' : ['socket1', 'socket2', 'socket3', 'socket4']
+    #   'score1' : 0,
+    #   'score2' : 0
     # }
 }
 
@@ -43,6 +45,12 @@ def join():
         return render_template('create.html', gamePin = gamePin)
     return 'an unexpected error occurred'
 
+
+@app.route('/multidie')
+def multidie():        
+    return render_template('multidie.html')
+
+
 @app.route('/game', methods=['POST'])
 def game():
     name = request.form['name']
@@ -52,18 +60,8 @@ def game():
     else:
         team = 'team2'
 
-    return render_template('game.html', name = name, team = team)
-
-
-@app.route('/multidie')
-def multidie():        
-    return render_template('multidie.html')
-
-
-@app.route('/game')
-def game():
     audio_file = url_for('static', filename='kahootMusic.mp3')
-    return render_template('game.html', audio_file= audio_file)
+    return render_template('game.html', name=name, team=team, gamePin=gamePin, audio_file=audio_file)
 
 # socket ------------------------------------------------------------------
 @socketio.on('room_exists')
@@ -179,7 +177,17 @@ def updatePlayers(gamePin):
 
 @socketio.on('startGame')
 def startGame(gamePin):
+    gameRooms[gamePin].update({'sockets':[], 'score1':0, 'score2':0})
     socketio.emit('startGame', to=gamePin)
+
+@socketio.on('registerSocket')
+def registerSocket(gamePin, playerName, team):
+    print('========== registering socket ==========')
+    join_room(gamePin + team)
+    print(request.sid)
+    gameRooms[gamePin]['sockets'].append(request.sid)
+    print(gameRooms[gamePin]['sockets'])
+
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')
@@ -193,6 +201,10 @@ def getUserId(client):
 @socketio.on('getRooms')
 def getRooms(client):
     socketio.emit('getRooms', rooms(client), to=client)
+
+@socketio.on('getGame')
+def getGame(gamePin):
+    socketio.emit('getGame', gameRooms[gamePin], to=request.sid)
 
 def generatePin():
     pin = ''
