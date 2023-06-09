@@ -17,13 +17,13 @@ socket.on('connect', function() {
 
 socket.on('startTrivia', function() {
     hideAll()
-    getFirstTrivia()
+    getTrivia()
     document.getElementById('qna').style.visibility = 'visible'
 })
 
-function getFirstTrivia() {
-    socket.emit('getFirstTrivia', gamePin, triviaQuestionNumber)
-    socket.once('getFirstTrivia', function(question) {
+function getTrivia() {
+    socket.emit('getTrivia', gamePin, triviaQuestionNumber)
+    socket.once('getTrivia', function(question) {
         answerChoices = [
             question['incorrectAnswers'][0],
             question['incorrectAnswers'][1],

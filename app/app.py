@@ -198,11 +198,11 @@ def registerSocket(gamePin, playerName, team):
 def startTrivia(gamePin):
     socketio.emit('startTrivia', to=gamePin)
 
-@socketio.on('getFirstTrivia')
+@socketio.on('getTrivia')
 def getTrivia(gamePin, triviaQuestionNumber):
     triviaSet = gameRooms[gamePin]['trivia']
     question = triviaSet[triviaQuestionNumber]
-    socketio.emit('getFirstTrivia', question, to=request.sid)
+    socketio.emit('getTrivia', question, to=request.sid)
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')
