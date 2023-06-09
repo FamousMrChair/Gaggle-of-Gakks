@@ -68,6 +68,10 @@ def game():
     audio_file = url_for('static', filename='kahootMusic.mp3')
     return render_template('game.html', name=name, team=team, gamePin=gamePin, audio_file=audio_file)
 
+@app.route('/results')
+def results():        
+    return render_template('results.html')
+
 # socket ------------------------------------------------------------------
 @socketio.on('room_exists')
 def room_exists(room, socket):
@@ -203,6 +207,13 @@ def getTrivia(gamePin, triviaQuestionNumber):
     triviaSet = gameRooms[gamePin]['trivia']
     question = triviaSet[triviaQuestionNumber]
     socketio.emit('getTrivia', question, to=request.sid)
+
+@socketio.on('checkAnswer')
+def checkAnswer(gamePin, triviaQuestionNumber, answer, team):
+    game = gameRooms[gamePin]
+    triviaSet = game['trivia']
+    correctAnswer = triviaSet[triviaQuestionNumber]['correctAnswer']
+    socketio.emit('checkAnswer', answer==correctAnswer, to=(gamePin+team))
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')

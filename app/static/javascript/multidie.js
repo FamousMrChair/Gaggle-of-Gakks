@@ -52,7 +52,16 @@ function check(event){
             multiply()
         }
     }
+    if (results == 15){
+        end = new Date().getTime()
+        console.log(end - start);
+
+    }
 };
 
 multiply();
+var start = new Date().getTime();
+var end = new Date().getTime();
+
+
 

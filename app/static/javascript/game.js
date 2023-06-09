@@ -1,24 +1,72 @@
+// game global vars -------------------------
 socket = io();
 var playerName;
 var gamePin;
 var team;
-const minigames = ['qna']
-var triviaQuestionNumber = 0
+var score = 0;
+const minigames = ['qna'];
+
+// trivia global variables ------------------
+var triviaQuestionNumber = 0;
+
+//multidie global vars ----------------------
+var num1;
+var num2;
+var results = 0;
+num1Head = document.createElement("h4");
+num2Head = document.createElement("h4");
+var start = new Date().getTime();
+var end = new Date().getTime();
+
 
 socket.on('connect', function() {
     console.log('connected');
     playerName = document.getElementById('playerName').innerHTML
     gamePin = document.getElementById('gamePin').innerHTML
     team = document.getElementById('team').innerHTML
+    // indicate which team you belong to
+    if (team == 'team1') {
+        document.getElementById('score1').style.color = 'green'
+        document.getElementById('score2').style.color = 'red'
+    } 
+    else {
+        document.getElementById('score2').style.color = 'green'
+        document.getElementById('score1').style.color = 'red'
+    }
 
     socket.emit('registerSocket', gamePin, playerName, team)
     socket.emit('startTrivia', gamePin)
 })
 
+// trivia -------------------------------------------------------------------
+answer0 = document.getElementById('qnaA0')
+answer1 = document.getElementById('qnaA1')
+answer2 = document.getElementById('qnaA2')
+answer3 = document.getElementById('qnaA3')
+
+answers = [answer0, answer1, answer2, answer3]
+answers.forEach(answer => {
+    answer.addEventListener('click', function(){
+        socket.emit('checkAnswer', gamePin, triviaQuestionNumber, answer.innerHTML, team)
+    })
+});
+
+socket.on('checkAnswer', function(bool) {
+    if(bool) {
+        console.log('correct!')
+        // if answer is correct, increment the current question number and get new trivia
+        triviaQuestionNumber += 1;
+        getTrivia();
+    } 
+    else {
+        console.log('incorrect!')
+    }
+})
+
 socket.on('startTrivia', function() {
     hideAll()
     getTrivia()
-    document.getElementById('qna').style.visibility = 'visible'
+    document.getElementById('qna').style.display = 'block'
 })
 
 function getTrivia() {
@@ -40,9 +88,66 @@ function getTrivia() {
     })
 }
 
+//multidie! ----------------------------------------------------------------------
+function random_item(items){
+    return items[Math.floor(Math.random() * items.length)];   
+}
+
+const nums = [];
+for(let i = 0; i <= 12; i++){
+    nums.push(i);
+}
+
+function multiply(event) {
+    //displaying numbers
+    num1 = random_item(nums);
+    num2 = random_item(nums);
+    numbers = document.getElementById("numbers");
+    num1Head.innerHTML = num1;
+    num2Head.innerHTML = num2;
+    numbers.appendChild(num1Head);
+    numbers.appendChild(num2Head);
+}
+
+function isKeyPressed(event) {
+    var x = document.getElementById("demo");
+    if (event.shiftKey) {
+      x.innerHTML = "The SHIFT key was pressed!";
+    } else {
+      x.innerHTML = "The SHIFT key was NOT pressed!";
+    }
+  }
+
+function check(event){
+    var x = document.getElementById("results");
+    if (event.shiftKey) {   
+        if ((num1 * num2) == document.getElementById("ans").value){
+            console.log("yay");
+            results += 1;
+            num1Head.innerHTML = "";
+            num2Head.innerHTML = "";
+            multiply()
+        }
+        else{
+            console.log("boooo");
+            num1Head.innerHTML = "";
+            num2Head.innerHTML = "";
+            multiply()
+        }
+    }
+    if (results == 15){
+        end = new Date().getTime()
+        console.log(end - start);
+
+    }
+};
+multiply();
+
+
+// utility ------------------------------------------------------------------
 function hideAll() {
     minigames.forEach(minigame => {
-        document.getElementById(minigame).style.visibility = 'hidden'
+        document.getElementById(minigame).style.display = 'none'
     });
 }
 

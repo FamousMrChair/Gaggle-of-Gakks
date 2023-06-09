@@ -108,3 +108,14 @@ kevinL -- 2023-06-08 23:16
 --------------------------------------------------------------
   - trivia set is now generated on creating a room 
   - trivia questions and answer choices now show on game page
+
+kevinL -- 2023-06-09 13:25
+--------------------------------------------------------------
+  - server can now detect right and wrong answers to trivia 
+  - when you answer correctly, you move forward
+  - incorporated multidie.html into game.html
+
+anjiniK -- 2023-06-09 13:25
+--------------------------------------------------------------
+  - incorporated multidie.js into game.js 
+  - created reselts.html and made a route for it
