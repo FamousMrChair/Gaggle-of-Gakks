@@ -27,35 +27,34 @@
 
     <div id="minigames" class="container-lg">
         <br>Games will show here
-    </div>
-
-    <div id="qna" class="container">
-        <div class="card text-center" hidden>
-            <h2>QUESTION</h2>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        test
+        <div id="qna" class="container" style="visibility: hidden;">
+            <div class="card text-center">
+                <h2 id="qnaQ">QUESTION</h2>
+                <div class="card-body">
+                    <div class="row">
+                        <div id="qnaA0" class="col">
+                            test
+                        </div>
+                        <div id="qnaA1" class="col">
+                            test
+                        </div>
                     </div>
-                    <div class="col">
-                        test
+                    <div class="row">
+                        <div id="qnaA2" class="col">
+                            test
+                        </div>
+                        <div id="qnaA3" class="col">
+                            test
+                        </div> 
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        test
-                    </div>
-                    <div class="col">
-                        test
-                    </div> 
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="playerName">{{name}}</div>
-    <div id="team">{{team}}</div>
-    <div id="gamePin">{{gamePin}}</div>
+    <div hidden id="playerName">{{name}}</div>
+    <div hidden id="team">{{team}}</div>
+    <div hidden id="gamePin">{{gamePin}}</div>
 
     <audio id="audio" controls autoplay loop>
         <source src="{{ audio_file}}" type="audio/mpeg">

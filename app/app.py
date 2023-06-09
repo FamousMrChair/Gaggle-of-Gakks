@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
 import random
+from trivia import get_question
 
 CHARACTERS = ['1','2','3','4','5','6','7','8','9','0',
               'A','B','C','D','E','F','G','H','I','J',
@@ -20,6 +21,7 @@ gameRooms = {
     #   'sockets' : ['socket1', 'socket2', 'socket3', 'socket4']
     #   'score1' : 0,
     #   'score2' : 0
+    #   'trivia' : {trivia questions go here}
     # }
 }
 
@@ -31,8 +33,11 @@ def home():
 def create():
     # generate the pin and add it to the list of games
     gamePin = generatePin()
+    triviaSet = {}
+    for i in range(10):
+        triviaSet.update({i:get_question()})
     #update(gameRooms, {gamePin : {'players' : [], 'team1':[], 'team2':[]}})
-    gameRooms.update({gamePin : {'players' : [], 'team1':[], 'team2':[]}})
+    gameRooms.update({gamePin : {'players' : [], 'trivia':triviaSet, 'team1':[], 'team2':[]}})
     print('========== game created ==========')
 
     return render_template('create.html', gamePin = gamePin)
@@ -183,11 +188,21 @@ def startGame(gamePin):
 @socketio.on('registerSocket')
 def registerSocket(gamePin, playerName, team):
     print('========== registering socket ==========')
+    join_room(gamePin)
     join_room(gamePin + team)
     print(request.sid)
     gameRooms[gamePin]['sockets'].append(request.sid)
     print(gameRooms[gamePin]['sockets'])
 
+@socketio.on('startTrivia')
+def startTrivia(gamePin):
+    socketio.emit('startTrivia', to=gamePin)
+
+@socketio.on('getFirstTrivia')
+def getTrivia(gamePin, triviaQuestionNumber):
+    triviaSet = gameRooms[gamePin]['trivia']
+    question = triviaSet[triviaQuestionNumber]
+    socketio.emit('getFirstTrivia', question, to=request.sid)
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')
