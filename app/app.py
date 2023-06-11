@@ -204,6 +204,8 @@ def startTrivia(gamePin):
 
 @socketio.on('getTrivia')
 def getTrivia(gamePin, triviaQuestionNumber):
+    if triviaQuestionNumber >= 10:
+        return
     triviaSet = gameRooms[gamePin]['trivia']
     question = triviaSet[triviaQuestionNumber]
     socketio.emit('getTrivia', question, to=request.sid)
@@ -224,6 +226,11 @@ def updateScore(gamePin, team, int):
 
     gameRooms[gamePin][score] += int
     socketio.emit('updateScore', {'score1' : gameRooms[gamePin]['score1'], 'score2' : gameRooms[gamePin]['score2']}, to=gamePin)
+
+@socketio.on('endMinigame') 
+def endMinigame(gamePin, team):
+    socketio.emit('endMinigame', to=gamePin+team)
+
 
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')

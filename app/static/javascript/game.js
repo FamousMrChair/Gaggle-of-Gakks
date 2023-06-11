@@ -71,8 +71,13 @@ socket.on('startTrivia', function() {
 })
 
 function getTrivia() {
+    if (triviaQuestionNumber >= 10) {
+        socket.emit('endMinigame', gamePin, team)
+    }
+
     socket.emit('getTrivia', gamePin, triviaQuestionNumber)
     socket.once('getTrivia', function(question) {
+
         answerChoices = [
             question['incorrectAnswers'][0],
             question['incorrectAnswers'][1],
@@ -88,6 +93,13 @@ function getTrivia() {
         }
     })
 }
+socket.on('endMinigame', function() {
+    hideAll()
+    document.getElementById('endMessage').innerHTML = 'Your team has finished the trivia! Please wait for the other team.'
+    document.getElementById('time').innerHTML = 'put a time here when we figure it out'
+    document.getElementById('scoreResults').innerHTML = score
+    document.getElementById('results').style.display = 'block'
+}) 
 
 function updateScore(int) {
     socket.emit('updateScore', gamePin, team, int)
