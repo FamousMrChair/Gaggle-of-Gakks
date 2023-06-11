@@ -50,6 +50,7 @@ answers.forEach(answer => {
     answer.addEventListener('click', function(){
         end = new Date().getTime()
         socket.emit('checkAnswer', gamePin, triviaQuestionNumber, answer.innerHTML, team, end - start)
+        console.log('response took ' + (end - start) + 'ms')
         start = new Date().getTime()
     })
 });
@@ -73,6 +74,8 @@ socket.on('startTrivia', function() {
     if (!(timerInterval == null)){
         clearInterval(timerInterval)
     }
+    start = new Date().getTime()
+    end = start
     timerInterval = setInterval(getTime, 100)
     document.getElementById('qna').style.display = 'block'
 })

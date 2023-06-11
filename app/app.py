@@ -230,8 +230,10 @@ def checkAnswer(gamePin, triviaQuestionNumber, answer, team, timeTaken):
 
     correct = answer == correctAnswer
     # ⌊ ( 1 - (( {response time} / {question timer} ) / 2 )) {points possible} ⌉
-    # copying kahoot's scoring algorithm
-    score = math.floor((1 - (timeTaken / 60000) / 2) * 1000)
+    # copying kahoot's scoring algorithm and modifying
+    score = math.floor((1 - (timeTaken / 20000)) * 1000)
+    if score < 0:
+        score = 0
     
     socketio.emit('checkAnswer', {'correct':correct, 'score':score}, to=(gamePin+team))
 
