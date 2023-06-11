@@ -4,7 +4,7 @@ var playerName;
 var gamePin;
 var team;
 var score = 0;
-const minigames = ['qna'];
+const minigames = ['qna', 'multidie'];
 
 // trivia global variables ------------------
 var triviaQuestionNumber = 0;
