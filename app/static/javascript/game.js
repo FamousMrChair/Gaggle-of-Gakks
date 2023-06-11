@@ -47,16 +47,18 @@ answer3 = document.getElementById('qnaA3')
 answers = [answer0, answer1, answer2, answer3]
 answers.forEach(answer => {
     answer.addEventListener('click', function(){
-        socket.emit('checkAnswer', gamePin, triviaQuestionNumber, answer.innerHTML, team)
+        end = new Date().getTime()
+        socket.emit('checkAnswer', gamePin, triviaQuestionNumber, answer.innerHTML, team, end - start)
+        start = new Date().getTime()
     })
 });
 
-socket.on('checkAnswer', function(bool) {
-    if(bool) {
+socket.on('checkAnswer', function(data) {
+    if(data['correct']) {
         console.log('correct!')
         // if answer is correct, increment the current question number and get new trivia
         triviaQuestionNumber += 1;
-        updateScore(100)
+        updateScore(data['score'])
         getTrivia();
     } 
     else {

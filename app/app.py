@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
 import random
 from trivia import get_question
+import math
 
 CHARACTERS = ['1','2','3','4','5','6','7','8','9','0',
               'A','B','C','D','E','F','G','H','I','J',
@@ -211,11 +212,17 @@ def getTrivia(gamePin, triviaQuestionNumber):
     socketio.emit('getTrivia', question, to=request.sid)
 
 @socketio.on('checkAnswer')
-def checkAnswer(gamePin, triviaQuestionNumber, answer, team):
+def checkAnswer(gamePin, triviaQuestionNumber, answer, team, timeTaken):
     game = gameRooms[gamePin]
     triviaSet = game['trivia']
     correctAnswer = triviaSet[triviaQuestionNumber]['correctAnswer']
-    socketio.emit('checkAnswer', answer==correctAnswer, to=(gamePin+team))
+
+    correct = answer == correctAnswer
+    # ⌊ ( 1 - (( {response time} / {question timer} ) / 2 )) {points possible} ⌉
+    # copying kahoot's scoring algorithm
+    score = math.floor((1 - (timeTaken / 60000) / 2) * 1000)
+    
+    socketio.emit('checkAnswer', {'correct':correct, 'score':score}, to=(gamePin+team))
 
 @socketio.on('updateScore')
 def updateScore(gamePin, team, int):
