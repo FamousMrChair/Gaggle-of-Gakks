@@ -56,6 +56,7 @@ socket.on('checkAnswer', function(bool) {
         console.log('correct!')
         // if answer is correct, increment the current question number and get new trivia
         triviaQuestionNumber += 1;
+        updateScore(100)
         getTrivia();
     } 
     else {
@@ -87,6 +88,14 @@ function getTrivia() {
         }
     })
 }
+
+function updateScore(int) {
+    socket.emit('updateScore', gamePin, team, int)
+}
+socket.on('updateScore', function(data) {
+    document.getElementById('score1').innerHTML = 'Team 1 Score: ' + data['score1']
+    document.getElementById('score2').innerHTML = 'Team 2 Score: ' + data['score2']
+})
 
 //multidie! ----------------------------------------------------------------------
 function random_item(items){

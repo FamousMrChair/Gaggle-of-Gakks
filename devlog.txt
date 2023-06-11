@@ -119,3 +119,7 @@ anjiniK -- 2023-06-09 13:25
 --------------------------------------------------------------
   - incorporated multidie.js into game.js 
   - created reselts.html and made a route for it
+
+kevinL -- 2023-06-10 21:15
+--------------------------------------------------------------
+  - score now updates for trivia

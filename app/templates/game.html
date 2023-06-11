@@ -14,10 +14,10 @@
         <div class="card text-center">
             <div class="row"> 
                 <div id="score1" class="col-sm">
-                    Team 1 Score: 100
+                    Team 1 Score: 0
                 </div>
                 <div id="score2" class="col-sm">
-                    Team 2 Score: 100
+                    Team 2 Score: 0
                 </div>
             </div> 
         </div>
@@ -32,8 +32,9 @@
         <br>Games will show here
 
         <!-- ================ trivia stuff =============== -->
-        <div id="qna" class="container" style="display: none;">
+        <div id="qna" class="container" style="display: block;">
             <div class="card text-center">
+                <h1 class="text-center">Trivia Time!</h1>
                 <h2 id="qnaQ">QUESTION</h2>
                 <div class="card-body">
                     <div class="row">
@@ -69,7 +70,7 @@
                 <div>
                 </div>
 
-                <input type="number" id="ans" onkeydown="check(event)">
+                <input type="number" id="ans" onkeydown="check(event)" style="text-align: center;">
                 <input type="reset" value="reset" hidden>
             </div>
         </div>

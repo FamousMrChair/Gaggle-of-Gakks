@@ -215,6 +215,16 @@ def checkAnswer(gamePin, triviaQuestionNumber, answer, team):
     correctAnswer = triviaSet[triviaQuestionNumber]['correctAnswer']
     socketio.emit('checkAnswer', answer==correctAnswer, to=(gamePin+team))
 
+@socketio.on('updateScore')
+def updateScore(gamePin, team, int):
+    if team == 'team1':
+        score = 'score1'
+    else:
+        score = 'score2'
+
+    gameRooms[gamePin][score] += int
+    socketio.emit('updateScore', {'score1' : gameRooms[gamePin]['score1'], 'score2' : gameRooms[gamePin]['score2']}, to=gamePin)
+
 # debug --------------------------------------------------------------------
 @socketio.on('getUserId')
 def getUserId(client):
