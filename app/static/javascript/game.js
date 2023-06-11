@@ -8,6 +8,7 @@ const minigames = ['qna', 'multidie'];
 
 // trivia global variables ------------------
 var triviaQuestionNumber = 0;
+var timerInterval;
 
 //multidie global vars ----------------------
 var num1;
@@ -69,6 +70,10 @@ socket.on('checkAnswer', function(data) {
 socket.on('startTrivia', function() {
     hideAll()
     getTrivia()
+    if (!(timerInterval == null)){
+        clearInterval(timerInterval)
+    }
+    timerInterval = setInterval(getTime, 100)
     document.getElementById('qna').style.display = 'block'
 })
 
@@ -173,6 +178,18 @@ function hideAll() {
         document.getElementById(minigame).style.display = 'none'
     });
 }
+
+function getTime() {
+    socket.emit('getTime', gamePin)
+    socket.once('getTime', function(time) {
+        document.getElementById('time').innerHTML = time
+    })
+}
+
+socket.on('stopTimer', function() {
+    clearInterval(timerInterval)
+    document.getElementById('time').innerHTML = 'Time is up!'
+})
 
 // debug
 function getRooms() {

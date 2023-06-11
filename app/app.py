@@ -4,6 +4,7 @@ from flask_socketio import SocketIO, send, emit, join_room, leave_room, rooms
 import random
 from trivia import get_question
 import math
+import time
 
 CHARACTERS = ['1','2','3','4','5','6','7','8','9','0',
               'A','B','C','D','E','F','G','H','I','J',
@@ -21,8 +22,10 @@ gameRooms = {
     #   'team2' : ['kevanjini', 'kevorden'],
     #   'sockets' : ['socket1', 'socket2', 'socket3', 'socket4']
     #   'score1' : 0,
-    #   'score2' : 0
-    #   'trivia' : {trivia questions go here}
+    #   'score2' : 0,
+    #   'trivia' : {trivia questions go here},
+    #   'startTime' : startTime,
+    #   'endTime' : startTime + 60000
     # }
 }
 
@@ -192,16 +195,24 @@ def startGame(gamePin):
 
 @socketio.on('registerSocket')
 def registerSocket(gamePin, playerName, team):
-    print('========== registering socket ==========')
-    join_room(gamePin)
-    join_room(gamePin + team)
-    print(request.sid)
-    gameRooms[gamePin]['sockets'].append(request.sid)
-    print(gameRooms[gamePin]['sockets'])
+    if not gamePin in gameRooms:
+        print('========== ' + gamePin + ' not found ==========')
+    else:
+        print('========== registering socket ==========')
+        join_room(gamePin)
+        join_room(gamePin + team)
+        print(request.sid)
+        gameRooms[gamePin]['sockets'].append(request.sid)
+        print(gameRooms[gamePin]['sockets'])
 
 @socketio.on('startTrivia')
 def startTrivia(gamePin):
-    socketio.emit('startTrivia', to=gamePin)
+    if not gamePin in gameRooms:
+        print('========== ' + gamePin + ' not found ==========')
+    else:
+        # startTime = gameRooms[gamePin].update({'startTime': (time.time() * 1000)})
+        gameRooms[gamePin].update({'endTime': (time.time() * 1000) + 60000})
+        socketio.emit('startTrivia', to=gamePin)
 
 @socketio.on('getTrivia')
 def getTrivia(gamePin, triviaQuestionNumber):
@@ -237,6 +248,23 @@ def updateScore(gamePin, team, int):
 @socketio.on('endMinigame') 
 def endMinigame(gamePin, team):
     socketio.emit('endMinigame', to=gamePin+team)
+
+@socketio.on('getTime')
+def getTime(gamePin):
+    if gamePin in gameRooms:
+        currentTime = time.time() * 1000
+        endTime = gameRooms[gamePin]['endTime']
+        if currentTime > endTime:
+            print('current time: ' + str(currentTime) + " is now greater than end time: " + str(endTime))
+            socketio.emit('stopTimer', to=gamePin)
+        else:
+            gameTimer = endTime - currentTime
+            gameTimer = int(gameTimer) / 1000
+            socketio.emit('getTime', gameTimer, to=gamePin)
+    # except Exception as e:
+        # print('========== stopping timer ==========')
+        # print(type(e), e)
+        # socketio.emit('stopTimer', to=gamePin)
 
 
 # debug --------------------------------------------------------------------
