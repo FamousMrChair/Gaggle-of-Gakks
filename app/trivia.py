@@ -8,6 +8,7 @@ def get_question():
     id = (api_dict[0])["id"]
     question = (api_dict[0])["question"]['text']
     correctAnswer= (api_dict[0])["correctAnswer"]
+    correctAnswer = correctAnswer.strip()
     difficulty = (api_dict[0])["difficulty"]
     incorrectAnswers = []
     for i in range(len((api_dict[0])["incorrectAnswers"])):

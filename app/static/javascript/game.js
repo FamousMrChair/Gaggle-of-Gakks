@@ -67,6 +67,15 @@ socket.on('checkAnswer', function(data) {
         updateScore(data['score'])
         getTrivia();
         start = new Date().getTime()
+
+        document.getElementById('message').style.color = 'green'
+        document.getElementById('message').innerHTML = 'A teammate answered correctly'
+
+        setTimeout(function() {
+            // Continue with the desired logic after the delay
+            // For example, you can display a message or perform additional actions
+            document.getElementById('message').innerHTML = ''
+        }, 3000);
     } 
     else {
         console.log('incorrect!')
@@ -76,6 +85,9 @@ socket.on('checkAnswer', function(data) {
         button3.disabled = true;
         button4.disabled = true;
 
+        document.getElementById('message').style.color = 'red'
+        document.getElementById('message').innerHTML = 'A teammate answered incorrectly'
+
         setTimeout(function() {
             button1.disabled = false;
             button2.disabled = false;
@@ -83,7 +95,9 @@ socket.on('checkAnswer', function(data) {
             button4.disabled = false;
             // Continue with the desired logic after the delay
             // For example, you can display a message or perform additional actions
-        }, 5000);
+            document.getElementById('message').innerHTML = ''
+        }, 1000);
+
     }
 })
 
