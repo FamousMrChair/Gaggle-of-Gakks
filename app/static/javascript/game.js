@@ -55,6 +55,11 @@ answers.forEach(answer => {
 });
 
 socket.on('checkAnswer', function(data) {
+    var button1 = document.getElementById("qnaA0");
+    var button2 = document.getElementById("qnaA1");
+    var button3 = document.getElementById("qnaA2");
+    var button4 = document.getElementById("qnaA3");
+    
     if(data['correct']) {
         console.log('correct!')
         // if answer is correct, increment the current question number and get new trivia
@@ -65,6 +70,20 @@ socket.on('checkAnswer', function(data) {
     } 
     else {
         console.log('incorrect!')
+        // To disable the button
+        button1.disabled = true;
+        button2.disabled = true;
+        button3.disabled = true;
+        button4.disabled = true;
+
+        setTimeout(function() {
+            button1.disabled = false;
+            button2.disabled = false;
+            button3.disabled = false;
+            button4.disabled = false;
+            // Continue with the desired logic after the delay
+            // For example, you can display a message or perform additional actions
+        }, 5000);
     }
 })
 
