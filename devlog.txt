@@ -128,3 +128,8 @@ kevinL -- 2023-06-11 00:02
 --------------------------------------------------------------
   - score is now based on response time
   - timer now displays
+
+KevinX -- 2023-6-12 2:32 PM
+--------------------------------------------------------------
+  - Disabled trivia buttons after an incorrect answer is submitted
+  - Enabled buttons after 5 seconds of delay
