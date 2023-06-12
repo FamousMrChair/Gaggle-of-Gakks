@@ -75,7 +75,7 @@ socket.on('checkAnswer', function(data) {
             // Continue with the desired logic after the delay
             // For example, you can display a message or perform additional actions
             document.getElementById('message').innerHTML = ''
-        }, 3000);
+        }, 1000);
     } 
     else {
         console.log('incorrect!')
@@ -96,7 +96,7 @@ socket.on('checkAnswer', function(data) {
             // Continue with the desired logic after the delay
             // For example, you can display a message or perform additional actions
             document.getElementById('message').innerHTML = ''
-        }, 1000);
+        }, 2000);
 
     }
 })
@@ -138,7 +138,7 @@ function getTrivia() {
 }
 socket.on('endMinigame', function() {
     hideAll()
-    document.getElementById('endMessage').innerHTML = 'Your team has finished the trivia! Please wait for the other team.'
+    document.getElementById('endMessage').innerHTML = 'Your team has finished the minigame! Please wait for the other team.'
     document.getElementById('time').innerHTML = 'put a time here when we figure it out'
     document.getElementById('scoreResults').innerHTML = score
     document.getElementById('results').style.display = 'block'
@@ -225,7 +225,42 @@ function getTime() {
 socket.on('stopTimer', function() {
     clearInterval(timerInterval)
     document.getElementById('time').innerHTML = 'Time is up!'
+    hideAll()
+    displayResults()
 })
+
+function displayResults(){
+    // show results
+    document.getElementById('results').style.display = 'block'
+
+    // get scores
+    score1 = document.getElementById('score1').innerHTML
+    score1 = score1.substring(score1.indexOf(":")+2, score1.length)
+    score1 = parseInt(score1)
+
+    score2 = document.getElementById('score2').innerHTML
+    score2 = score2.substring(score2.indexOf(":")+2, score2.length)
+    score2 = parseInt(score2)
+
+    // show end message
+    if (team == 'team1') {
+        //show scores
+        document.getElementById('scoreResults').innerHTML = document.getElementById('score1').innerHTML
+        if (score1 > score2) {
+            document.getElementById('endMessage').innerHTML = 'You win round 1!'
+        } else {
+            document.getElementById('endMessage').innerHTML = 'You lose!'
+        }
+    } else{
+        //show scores
+        document.getElementById('scoreResults').innerHTML = document.getElementById('score2').innerHTML
+        if (score1 < score2) {
+            document.getElementById('endMessage').innerHTML = 'You win round 1!'
+        } else {
+            document.getElementById('endMessage').innerHTML = 'You lose!'
+        }
+    }
+}
 
 // debug
 function getRooms() {
