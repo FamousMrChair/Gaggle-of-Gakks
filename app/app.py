@@ -261,7 +261,7 @@ def getTime(gamePin):
             socketio.emit('stopTimer', to=gamePin)
         else:
             gameTimer = endTime - currentTime
-            gameTimer = int(gameTimer) / 1000
+            gameTimer = int(math.floor(gameTimer / 1000))
             socketio.emit('getTime', gameTimer, to=gamePin)
     # except Exception as e:
         # print('========== stopping timer ==========')
