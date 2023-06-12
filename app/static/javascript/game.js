@@ -48,10 +48,9 @@ answer3 = document.getElementById('qnaA3')
 answers = [answer0, answer1, answer2, answer3]
 answers.forEach(answer => {
     answer.addEventListener('click', function(){
-        end = new Date().getTime()
-        socket.emit('checkAnswer', gamePin, triviaQuestionNumber, answer.innerHTML, team, end - start)
-        console.log('response took ' + (end - start) + 'ms')
-        start = new Date().getTime()
+        current = new Date().getTime()
+        socket.emit('checkAnswer', gamePin, triviaQuestionNumber, answer.innerHTML, team, current - start)
+        console.log('response took ' + (current - start) + 'ms')
     })
 });
 
@@ -62,6 +61,7 @@ socket.on('checkAnswer', function(data) {
         triviaQuestionNumber += 1;
         updateScore(data['score'])
         getTrivia();
+        start = new Date().getTime()
     } 
     else {
         console.log('incorrect!')
