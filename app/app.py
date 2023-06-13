@@ -123,6 +123,7 @@ def removePlayer(name, gamePin):
     # add the player into the list of names
     players = list(game['players'])
     players.remove(name)
+    leave_room(gamePin)
 
     # get the teams
     team1 = list(game['team1'])
@@ -131,12 +132,14 @@ def removePlayer(name, gamePin):
     # remove the player
     try:
         team1.remove(name)
+        leave_room(gamePin+'team1')
         print('player was removed from team1')
     except ValueError:
         print('that player is not in team1')
 
     try:
         team2.remove(name)
+        leave_room(gamePin+'team2')
         print('player was removed from team2')
     except ValueError:
         print('that player is not in team2')
@@ -267,6 +270,17 @@ def getTime(gamePin):
         # print('========== stopping timer ==========')
         # print(type(e), e)
         # socketio.emit('stopTimer', to=gamePin)
+
+@socketio.on('startMultidie')
+def startMultidie(gamePin):
+    if not gamePin in gameRooms:
+        print('========== ' + gamePin + ' not found ==========')
+    else:
+        socketio.emit('startMultidie', gameRooms[gamePin]['players'], to=gamePin)
+
+@socketio.on('endMultidie')
+def endMultidie(gamePin, playerName):
+    socketio.emit('endMultidie', playerName, to=gamePin)
 
 
 # debug --------------------------------------------------------------------

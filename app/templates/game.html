@@ -59,7 +59,7 @@
                 </div>
             </div>
 
-            <div id="message" class="text-center">
+            <div id="messageTrivia" class="text-center">
 
             </div>
         </div>
@@ -72,6 +72,7 @@
                 <h2>Instructions:</h2>
                 <p>The rules are simple- answer the multiplication problems as quickly as possible. 
                 The person who gets to 15 points wins! </p>
+                <h2>Hit shift to submit your answer</h2>
 
                 <p id="numbers">Your numbers are</p>
                 <div>
@@ -79,6 +80,12 @@
 
                 <input type="number" id="ans" onkeydown="check(event)" style="text-align: center;">
                 <input type="reset" value="reset" hidden>
+                <div id="resultsMultidie">
+                    0
+                </div>
+            </div>
+            <div id="messageMultidie" class="text-center">
+
             </div>
         </div>
 
@@ -87,7 +94,7 @@
                 <!-- loss or win statement -->
                 <h3 id="endMessage"> You </h3>
 
-                <p id="time"> 
+                <p id="time" style="display: none;"> 
                     Time: 
                 </p>
                 <p id="scoreResults"> 

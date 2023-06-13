@@ -4,7 +4,7 @@ var playerName;
 var gamePin;
 var team;
 var score = 0;
-const minigames = ['qna', 'multidie'];
+const minigames = ['qna', 'multidie', 'results'];
 
 // trivia global variables ------------------
 var triviaQuestionNumber = 0;
@@ -68,13 +68,13 @@ socket.on('checkAnswer', function(data) {
         getTrivia();
         start = new Date().getTime()
 
-        document.getElementById('message').style.color = 'green'
-        document.getElementById('message').innerHTML = 'A teammate answered correctly'
+        document.getElementById('messageTrivia').style.color = 'green'
+        document.getElementById('messageTrivia').innerHTML = 'A teammate answered correctly'
 
         setTimeout(function() {
             // Continue with the desired logic after the delay
             // For example, you can display a message or perform additional actions
-            document.getElementById('message').innerHTML = ''
+            document.getElementById('messageTrivia').innerHTML = ''
         }, 1000);
     } 
     else {
@@ -85,8 +85,8 @@ socket.on('checkAnswer', function(data) {
         button3.disabled = true;
         button4.disabled = true;
 
-        document.getElementById('message').style.color = 'red'
-        document.getElementById('message').innerHTML = 'A teammate answered incorrectly'
+        document.getElementById('messageTrivia').style.color = 'red'
+        document.getElementById('messageTrivia').innerHTML = 'A teammate answered incorrectly'
 
         setTimeout(function() {
             button1.disabled = false;
@@ -95,7 +95,7 @@ socket.on('checkAnswer', function(data) {
             button4.disabled = false;
             // Continue with the desired logic after the delay
             // For example, you can display a message or perform additional actions
-            document.getElementById('message').innerHTML = ''
+            document.getElementById('messageTrivia').innerHTML = ''
         }, 2000);
 
     }
@@ -153,6 +153,11 @@ socket.on('updateScore', function(data) {
 })
 
 //multidie! ----------------------------------------------------------------------
+socket.on('startMultidie', function(playerList) {
+    document.getElementById('multidie').style.display = 'block'
+    score = 0
+})
+
 function random_item(items){
     return items[Math.floor(Math.random() * items.length)];   
 }
@@ -180,14 +185,23 @@ function isKeyPressed(event) {
     } else {
       x.innerHTML = "The SHIFT key was NOT pressed!";
     }
-  }
+}
+
+// input.addEventListener('keypress', function(event) {
+//     if (event.key === 'Enter') {
+//         check()
+//     }
+// })
 
 function check(event){
-    var x = document.getElementById("results");
     if (event.shiftKey) {   
+        var score = document.getElementById("resultsMultidie")
         if ((num1 * num2) == document.getElementById("ans").value){
             console.log("yay");
-            results += 1;
+            currentScore = parseInt(score.innerHTML)
+            newScore = currentScore + 1
+            score.innerHTML = newScore
+
             num1Head.innerHTML = "";
             num2Head.innerHTML = "";
             multiply()
@@ -198,14 +212,25 @@ function check(event){
             num2Head.innerHTML = "";
             multiply()
         }
+        document.getElementById('ans').value = ''
     }
-    if (results == 15){
+    if (parseInt(score.innerHTML) == 15){
         end = new Date().getTime()
         console.log(end - start);
-
+        socket.emit('endMultidie', gamePin, playerName)
     }
 };
 multiply();
+
+socket.on('endMultidie', function(winner) {
+    hideAll()
+    document.getElementById('results').style.display = 'block'
+    if (playerName = winner) {
+        document.getElementById('endMessage').innerHTML = 'You have won the game!'
+    } else {
+        document.getElementById('endMessage').innerHTML = 'You lose! ' + winner + ' has won the game!'
+    }
+})
 
 
 // utility ------------------------------------------------------------------
@@ -247,17 +272,27 @@ function displayResults(){
         //show scores
         document.getElementById('scoreResults').innerHTML = document.getElementById('score1').innerHTML
         if (score1 > score2) {
-            document.getElementById('endMessage').innerHTML = 'You win round 1!'
+            document.getElementById('endMessage').innerHTML = 'You win round 1! Round 2 will begin shortly.'
+            setTimeout( function() {
+                hideAll()
+                socket.emit('startMultidie', gamePin)
+            }, 5000)
         } else {
             document.getElementById('endMessage').innerHTML = 'You lose!'
+            socket.emit('removePlayer', playerName, gamePin)
         }
     } else{
         //show scores
         document.getElementById('scoreResults').innerHTML = document.getElementById('score2').innerHTML
         if (score1 < score2) {
-            document.getElementById('endMessage').innerHTML = 'You win round 1!'
+            document.getElementById('endMessage').innerHTML = 'You win round 1! Round 2 will begin shortly.'
+            setTimeout( function() {
+                hideAll()
+                socket.emit('startMultidie', gamePin)
+            }, 5000)
         } else {
             document.getElementById('endMessage').innerHTML = 'You lose!'
+            socket.emit('removePlayer', playerName, gamePin)
         }
     }
 }
