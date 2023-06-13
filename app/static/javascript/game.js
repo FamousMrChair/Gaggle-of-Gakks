@@ -225,7 +225,7 @@ multiply();
 socket.on('endMultidie', function(winner) {
     hideAll()
     document.getElementById('results').style.display = 'block'
-    if (playerName = winner) {
+    if (playerName === winner) {
         document.getElementById('endMessage').innerHTML = 'You have won the game!'
     } else {
         document.getElementById('endMessage').innerHTML = 'You lose! ' + winner + ' has won the game!'
